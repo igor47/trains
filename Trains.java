@@ -14,12 +14,20 @@ public class Trains {
 		
 	//	TrainMap trainMap = new TrainMap(filename);
 		try {
-			AdjacencyList al = new AdjacencyList();
-			al.addEdge(3,2,5);
-			System.out.println("Distance between 3 and 2 is " + al.dist(3,2));
-			int a, b;
-			a = al.dist(3,5);
-			b = al.dist(1,2);
+			Graph al = new Graph();
+			al.addEdge(1,2,5);
+			al.addEdge(2,3,4);
+			al.addEdge(3,4,8);
+			al.addEdge(4,3,8);
+			al.addEdge(4,5,6);
+			al.addEdge(1,4,5);
+			al.addEdge(3,5,2);
+			al.addEdge(5,2,3);
+			al.addEdge(1,5,7);
+			System.out.println("Distance between A and E is " + al.distance(1,5));
+			System.out.println("Shorest distance between A and C is " + al.shortestPath(1,3));
+			System.out.println("Shorest distance between B and E is " + al.shortestPath(2,5));
+			System.out.println("Shorest distance between C and A is " + al.shortestPath(3,1));
 		} catch(GraphException e) {
 			System.out.println("Graph Exception:");
 			System.out.println(e.getError());
