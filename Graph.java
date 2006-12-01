@@ -8,6 +8,17 @@ public interface GraphRepresentation {
 
 //public class AdjacencyList implements GraphRepresentation {
 
+public class Route {
+	public Route(String route, int distance)
+	{
+		this.route = route;
+		this.distance = distance;
+	}
+	
+	String route;
+	int distance;
+}
+	
 
 public class Graph {
 	public int distance(v1,v2)
@@ -15,17 +26,17 @@ public class Graph {
 		return 0;
 	}
 	
-	public Routes shortestPath(start,end)
+	public Route shortestPath(start,end)
 	{
 		return;
 	}
 
-	public Routes allRoutesDistances(start,end,maxDistance)
+	public Route[] allRoutesDistances(start,end,maxDistance)
 	{
 		return;
 	}
 
-	public Routes allRoutesHops(start,end,maxHops)
+	public Route[] allRoutesHops(start,end,maxHops)
 	{
 		return;
 	}
