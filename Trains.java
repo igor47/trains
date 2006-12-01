@@ -9,7 +9,17 @@ public class Trains {
 		return "";
 	}
 
-	public int routeDistance throws NoSuchRoute{
+	public int routeDistance(String route) throws NoSuchRouteException{
+		return 0;
+	}
+
+	public int shortestPathDist throws NoSuchRouteException
+	{
+		return 0;
+	}
+
+	public int numberOfPaths(char start, char end)
+	{
 		return 0;
 	}
 }
