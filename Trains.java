@@ -12,7 +12,6 @@ public class Trains {
 			return;
 		}
 		
-		System.out.println("reading...");
 		TrainMap trainMap = new TrainMap(filename);
 	}
 }

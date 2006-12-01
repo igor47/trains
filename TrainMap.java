@@ -1,3 +1,5 @@
+import java.io.*;
+
 public class TrainMap {
     public TrainMap(String filename)
     {
@@ -21,7 +23,15 @@ public class TrainMap {
 
     public void createMap(String filename)
     {
-        String data = readGraphData(filename);
+		String data;
+		try {
+	        data = readGraphData(filename);
+		} catch(Exception e) {
+			System.out.println("Could not read graph data");
+			System.out.println(e.toString());
+			return;
+		}
+	
         System.out.println("Read " + data);
     }
 

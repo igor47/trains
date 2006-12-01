@@ -6,7 +6,21 @@ public interface GraphRepresentation {
     public boolean hasEdge(v1,v2);
 }
 
-//public class AdjacencyList implements GraphRepresentation {
+public class AdjacencyList implements GraphRepresentation {
+	private class Edge {
+		public Edge(node, distance) {
+			this.node = node;
+			this.distance = distance;
+		}
+		int node;
+		int distance;
+	}
+
+	int
+	
+	public void addEdge(v1,v2,dist){
+		if
+		
 
 public class Route {
 	public Route(String route, int distance)
