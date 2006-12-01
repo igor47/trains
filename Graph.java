@@ -80,16 +80,18 @@ public class Graph extends AdjacencyList{
 			array[i] = ((Integer)list.removeFirst()).intValue();
 		return array;
 	}
-
-
 				
-	public int [] allPathsDistance(int start, int end, int maxDistance) throws GraphException
+	private int [] countPaths(int start, int end, int maxDistance, boolean countHops) 
+		throws GraphException 
 	{
 		LinkedList queue = new LinkedList();
 		LinkedList distances = new LinkedList();
 		
 		Status current = new Status(start, 0);		//initialize current
 		
+		/* note: this loop is organized counter-intuitively.  this is to insure that
+		 * start is never current when we're checking if we've found a path. otherwise
+		 * when start==end we would always find a distance-0 path and there's never one */
 		for(;;){
 			LinkedList neighborList = getNeighbors(current.node);	//get neighbor list
 			ListIterator i = neighborList.listIterator(0);
@@ -97,8 +99,11 @@ public class Graph extends AdjacencyList{
 			{
 				Edge neighbor = (Edge) i.next();					//for each neighbor
 				
-				int distanceFromStart = current.distance + neighbor.distance;
-				if( distanceFromStart < maxDistance)				//add to queue if within range
+				int distanceFromStart = current.distance;
+				if(countHops)	distanceFromStart += 1;
+				else 			distanceFromStart += neighbor.distance;
+
+				if( distanceFromStart < maxDistance)		//if within range, add to queue
 					queue.add( new Status( neighbor.node, distanceFromStart) );
 			}
 		
@@ -111,33 +116,12 @@ public class Graph extends AdjacencyList{
 
 		return listToArray(distances);
 	}
+	
+	public int [] allPathsDistance(int start, int end, int maxDistance) throws GraphException {
+		return countPaths(start,end,maxDistance,false);
+	}
 
-	public int [] allPathsHops(int start, int end, int maxHops)
-	{
-		LinkedList queue = new LinkedList();
-		LinkedList distances = new LinkedList();
-		
-		Status current = new Status(start, 0);		//initialize current
-		
-		for(;;){
-			LinkedList neighborList = getNeighbors(current.node);	//get neighbor list
-			ListIterator i = neighborList.listIterator(0);
-			while(i.hasNext())
-			{
-				Edge neighbor = (Edge) i.next();					//for each neighbor
-				
-				int hopsFromStart = current.distance + 1;
-				if( hopsFromStart < maxHops)				//add to queue if within range
-					queue.add( new Status( neighbor.node, hopsFromStart) );
-			}
-		
-			try { current = (Status) queue.removeFirst();	//try to get next node to explore
-			} catch (NoSuchElementException e) {break;}			//break if none
-			
-			if(current.node == end )			 		//if we found another path to end
-				distances.add(new Integer(current.distance));	//take down its distance
-		}
-
-		return listToArray(distances);
+	public int [] allPathsHops(int start, int end, int maxHops) throws GraphException {
+		return countPaths(start,end,maxHops,true);
 	}
 }
