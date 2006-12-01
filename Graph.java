@@ -71,19 +71,26 @@ public class Graph extends AdjacencyList{
 		
 		return status[end].distance;
 	}
+
+	private int [] listToArray(LinkedList list)
+	{
+		int [] array = new int[list.size()];		//create return list
+		int i;
+		for( i = 0; !list.isEmpty(); i++)
+			array[i] = ((Integer)list.removeFirst()).intValue();
+		return array;
+	}
+
+
 				
-	public int [] allRoutesDistances(int start, int end, int maxDistance) throws GraphException
+	public int [] allPathsDistance(int start, int end, int maxDistance) throws GraphException
 	{
 		LinkedList queue = new LinkedList();
 		LinkedList distances = new LinkedList();
 		
-		queue.add( new Status(start, 0) );		//add start node to queue
+		Status current = new Status(start, 0);		//initialize current
 		
-		while( !queue.isEmpty()) {							//while we have paths to explore
-			Status current = (Status) queue.removeFirst();
-			if(current.node == end) 			//found another path to end
-				distances.add(new Integer(current.distance));	//take down its distance
-
+		for(;;){
 			LinkedList neighborList = getNeighbors(current.node);	//get neighbor list
 			ListIterator i = neighborList.listIterator(0);
 			while(i.hasNext())
@@ -91,19 +98,21 @@ public class Graph extends AdjacencyList{
 				Edge neighbor = (Edge) i.next();					//for each neighbor
 				
 				int distanceFromStart = current.distance + neighbor.distance;
-				if( distanceFromStart < maxDistance)
+				if( distanceFromStart < maxDistance)				//add to queue if within range
 					queue.add( new Status( neighbor.node, distanceFromStart) );
 			}
-		}									//done finding distances
+		
+			try { current = (Status) queue.removeFirst();	//try to get next node to explore
+			} catch (NoSuchElementException e) {break;}			//break if none
+			
+			if(current.node == end )			 		//if we found another path to end
+				distances.add(new Integer(current.distance));	//take down its distance
+		}
 
-		int [] dists = new int[distances.size()];		//create return list
-		int i;
-		for( i = 0; !distances.isEmpty(); i++)
-			dists[i] = ((Integer)distances.removeFirst()).intValue();
-		return dists;
+		return listToArray(distances);
 	}
 
-	public int [] allRoutesHops(int start, int end, int maxHops)
+	public int [] allPathsHops(int start, int end, int maxHops)
 	{
 		return new int [0];
 	}

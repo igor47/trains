@@ -27,7 +27,8 @@ public class Trains {
 			System.out.println("Distance between A and E is " + al.distance(1,5));
 			System.out.println("Shorest distance between A and C is " + al.shortestPath(1,3));
 			System.out.println("Shorest distance between B and E is " + al.shortestPath(2,5));
-			System.out.println("Shorest distance between C and A is " + al.shortestPath(3,1));
+			System.out.println("Number of rouetes between C and C < 30 is " + (al.allPathsDistance(3,3,30)).length);
+			System.out.println(al.allPathsDistance(3,3,30)[0]);
 		} catch(GraphException e) {
 			System.out.println("Graph Exception:");
 			System.out.println(e.getError());
