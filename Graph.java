@@ -114,6 +114,30 @@ public class Graph extends AdjacencyList{
 
 	public int [] allPathsHops(int start, int end, int maxHops)
 	{
-		return new int [0];
+		LinkedList queue = new LinkedList();
+		LinkedList distances = new LinkedList();
+		
+		Status current = new Status(start, 0);		//initialize current
+		
+		for(;;){
+			LinkedList neighborList = getNeighbors(current.node);	//get neighbor list
+			ListIterator i = neighborList.listIterator(0);
+			while(i.hasNext())
+			{
+				Edge neighbor = (Edge) i.next();					//for each neighbor
+				
+				int hopsFromStart = current.distance + 1;
+				if( hopsFromStart < maxHops)				//add to queue if within range
+					queue.add( new Status( neighbor.node, hopsFromStart) );
+			}
+		
+			try { current = (Status) queue.removeFirst();	//try to get next node to explore
+			} catch (NoSuchElementException e) {break;}			//break if none
+			
+			if(current.node == end )			 		//if we found another path to end
+				distances.add(new Integer(current.distance));	//take down its distance
+		}
+
+		return listToArray(distances);
 	}
 }
