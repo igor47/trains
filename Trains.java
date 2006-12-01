@@ -12,27 +12,18 @@ public class Trains {
 			return;
 		}
 		
-	//	TrainMap trainMap = new TrainMap(filename);
-		try {
-			Graph al = new Graph();
-			al.addEdge(1,2,5);
-			al.addEdge(2,3,4);
-			al.addEdge(3,4,8);
-			al.addEdge(4,3,8);
-			al.addEdge(4,5,6);
-			al.addEdge(1,4,5);
-			al.addEdge(3,5,2);
-			al.addEdge(5,2,3);
-			al.addEdge(1,5,7);
-			System.out.println("Distance between A and E is " + al.distance(1,5));
-			System.out.println("Shorest distance between A and C is " + al.shortestPath(1,3));
-			System.out.println("Shorest distance between B and E is " + al.shortestPath(2,5));
-			System.out.println("Number of rouetes between C and C < 30 is " + (al.allPathsDistance(3,3,30)).length);
-			System.out.println(al.allPathsDistance(3,3,30)[0]);
-		} catch(GraphException e) {
-			System.out.println("Graph Exception:");
-			System.out.println(e.getError());
-		}
+		TrainMap trainMap = new TrainMap(filename);
+
+		System.out.println("Output #1: " + trainMap.routeDistance("ABC")); 
+		System.out.println("Output #2: " + trainMap.routeDistance("AD")); 
+		System.out.println("Output #3: " + trainMap.routeDistance("ADC")); 
+		System.out.println("Output #4: " + trainMap.routeDistance("AEBCD")); 
+		System.out.println("Output #5: " + trainMap.routeDistance("AED")); 
+
+		System.out.println("Output #6: " + trainMap.numberOfPaths_MaxHops('C','C',3));
+		System.out.println("Output #7: " + trainMap.numberOfPaths_ExactHops('A','C',4));
+		System.out.println("Output #8: " + trainMap.shortestPathDist('A','C'));
+		System.out.println("Output #9: " + trainMap.shortestPathDist('B','B'));
+		System.out.println("Output #10: " + trainMap.numberOfPaths_Distance('C','C',29));
 	}
 }
-

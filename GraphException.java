@@ -8,7 +8,7 @@ public class GraphException extends Exception {
 		this.errorMsg = msg;
 	}
 
-	public String getError() {
+	public String errorMsg() {
 		return this.errorMsg;
 	}
 }

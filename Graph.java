@@ -44,7 +44,7 @@ public class Graph extends AdjacencyList{
 		status[start] = new Status(0,false);
 		int current = start;
 
-		while( current != end) //while the current is not the one we're looking for
+		do
 		{
 			LinkedList neighborList = getNeighbors(current);	//get neighbors
 			ListIterator i = neighborList.listIterator(0);
@@ -53,21 +53,24 @@ public class Graph extends AdjacencyList{
 				Edge neighbor = (Edge) i.next();
 				int distanceThroughCurrent = status[current].distance + neighbor.distance;
 				if(status[neighbor.node] == null) 				//if we've never seen it before
-				{												//so add it to status list
+				{												// add it to status list
 					status[neighbor.node] = new Status(distanceThroughCurrent,false);
-					System.out.println("From " + current + "found " + neighbor.node + 
-							" with distance " + distanceThroughCurrent);
 				}
-
 																//if we've found a shorter path
 				else if(status[neighbor.node].distance > distanceThroughCurrent)
 					status[neighbor.node].distance = distanceThroughCurrent; //change distance
 			}  //done going through neighbors
 
 			status[current].done = true;	//we should never come back to the current node
+			
+			if(current == end) 				// This only happens on the first iteration since
+				status[current] = null;		// it is the loop exit condition, so if its true then
+											// current == start == end.  We want to find this node again
+											// so we pretend we haven't seen it yet
+			
 			current = getClosest(status);	//the next node is the closest onea
 			if(current==-1) throw new GraphException("No such path");  //if no more next nodes
-		} while(true)
+		} while( current != end);
 		
 		return status[end].distance;
 	}
@@ -92,7 +95,7 @@ public class Graph extends AdjacencyList{
 		/* note: this loop is organized counter-intuitively.  this is to insure that
 		 * start is never current when we're checking if we've found a path. otherwise
 		 * when start==end we would always find a distance-0 path and there's never one */
-		for(;;){
+		while(true){
 			LinkedList neighborList = getNeighbors(current.node);	//get neighbor list
 			ListIterator i = neighborList.listIterator(0);
 			while(i.hasNext())
@@ -103,7 +106,7 @@ public class Graph extends AdjacencyList{
 				if(countHops)	distanceFromStart += 1;
 				else 			distanceFromStart += neighbor.distance;
 
-				if( distanceFromStart < maxDistance)		//if within range, add to queue
+				if( distanceFromStart <= maxDistance)		//if within range, add to queue
 					queue.add( new Status( neighbor.node, distanceFromStart) );
 			}
 		

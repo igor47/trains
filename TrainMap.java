@@ -1,13 +1,10 @@
 import java.io.*;
 
-public class TrainMap {
-    public TrainMap(String filename)
-    {
-        map = 0;
+public class TrainMap extends Graph{
+    public TrainMap(String filename) {
+		super();
         createMap(filename);
     }
-
-    int map;
 
     private String readGraphData(String filename) throws IOException,FileNotFoundException
     {
@@ -21,6 +18,10 @@ public class TrainMap {
         return data;
     }
 
+	private int tr(char v) {
+		return Character.getNumericValue(v) - 10;
+	}
+
     public void createMap(String filename)
     {
 		String data;
@@ -31,40 +32,70 @@ public class TrainMap {
 			System.out.println(e.toString());
 			return;
 		}
-	
-        System.out.println("Read " + data);
+
+		String [] edges = data.split("[\\s]*,[\\s]*");
+		int i;
+		for(i = 0; i < edges.length; i++){
+			int weight = Integer.parseInt(edges[i].substring(2));
+			try{
+				addEdge(tr(edges[i].charAt(0)),tr(edges[i].charAt(1)),weight);
+			} catch(GraphException e) { System.out.println(e.errorMsg()); }
+		}
     }
 
     //answers questions 1-5
-    public int routeDistance(String route) throws NoSuchRouteException{
-        return 0;
+    public Object routeDistance(String route) 
+	{
+		int i, rd = 0;
+
+		try{
+			for(i=0; i < (route.length() - 1); ) {
+				rd += distance(tr(route.charAt(i)),tr(route.charAt(++i)));
+			}
+		} catch (GraphException e) {
+			return "No such route"; 
+		}
+				
+        return new Integer(rd);
     }
 
 
     //answers questions 8,9
-    public int shortestPathDist(char start, char end) throws NoSuchRouteException{
-        return 0;
+    public Object shortestPathDist(char start, char end){
+		try {
+			return new Integer(shortestPath(tr(start),tr(end)));
+		} catch (GraphException e) { return e.errorMsg(); }
     }
 
     //answers question 10
-    public int numberOfPaths_Distance(char start, char end)
+    public Object numberOfPaths_Distance(char start, char end, int maxDist)
     {
-        return 0;
+		try {
+			return new Integer(allPathsDistance(tr(start),tr(end),maxDist).length);
+		} catch (GraphException e) { return e.errorMsg(); }
     }
 
     //answers question 6
-    public int numberOfPaths_MaxHops(char start, char end, int maxHops)
+    public Object numberOfPaths_MaxHops(char start, char end, int maxHops)
     {
-        return 0;
+		try {
+			return new Integer(allPathsHops(tr(start),tr(end),maxHops).length);
+		} catch (GraphException e) { return e.errorMsg(); }
     }
 
     //answers question 7
-    public int numberOfPaths_ExactHops(char start, char end, int hops)
+    public Object numberOfPaths_ExactHops(char start, char end, int hops)
     {
-        return 0;
-    }
+		int [] pathLengths;
+		try {
+			pathLengths = allPathsHops(tr(start),tr(end),hops);
+		} catch(GraphException e) { return e.errorMsg(); }
 
-    public class NoSuchRouteException extends Exception {
-        public NoSuchRouteException(){}
+		int i, paths=0;				//count paths that are exactly hops long
+		for(i=0; i < pathLengths.length; i++)
+			if(pathLengths[i] == hops) 
+				paths+=1;
+		
+        return new Integer(paths);
     }
 }
